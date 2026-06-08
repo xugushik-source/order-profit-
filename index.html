@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { background: #0a0a0a; color: #fff; font-family: "Montserrat", sans-serif; }
+html { scroll-behavior: smooth; height: 100%; }
+body { background: #0a0a0a; color: #fff; font-family: "Montserrat", sans-serif; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* ── TABS NAV ── */
 .tabs-nav {
@@ -55,7 +55,7 @@ body { background: #0a0a0a; color: #fff; font-family: "Montserrat", sans-serif; 
 .tab-order:hover { background: #E8C96B; }
 
 /* ── PAGES ── */
-.page { display: none; min-height: 100vh; padding-top: 58px; }
+.page { display: none; min-height: 100vh; padding-top: 58px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .page.active { display: block; }
 
 /* ══════════════════════════════
@@ -700,6 +700,24 @@ body { background: #0a0a0a; color: #fff; font-family: "Montserrat", sans-serif; 
 </div>
 
 <script>
+// ── NAV ──
+function showPage(name, btn) {
+  try {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    var page = document.getElementById('page-' + name);
+    if(page) page.classList.add('active');
+    if(btn) btn.classList.add('active');
+    window.scrollTo(0, 0);
+  } catch(e) { console.log(e); }
+}
+function showPageByName(name) {
+  var btns = document.querySelectorAll('.tab-btn');
+  var pages = ['home','about','services','packages','process','contacts'];
+  var idx = pages.indexOf(name);
+  showPage(name, btns[idx] || null);
+}
+
 // ── MODAL OPEN/CLOSE ──
 function openModal(id) {
   document.getElementById('modalTitle').textContent = getServiceName(id);
@@ -1388,3 +1406,4 @@ function buildSimpleFormFull(id) {
 </script>
 </body>
 </html>
+
