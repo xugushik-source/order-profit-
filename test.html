@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: вы продаёте слишком дёшево? — Order & Profit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: #0a0a0a;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  min-height: 100vh;
+}
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: #0a0a0a;
+  border-bottom: 1px solid #222;
+  display: flex; align-items: center;
+  padding: 0 24px; height: 58px;
+}
+.nav-logo {
+  font-family: "Playfair Display", serif;
+  font-size: 18px; font-weight: 700;
+  color: #C9A84C; letter-spacing: 3px;
+}
+.nav-tag {
+  margin-left: 20px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: #555; border-left: 1px solid #222;
+  padding-left: 20px;
+}
+.nav-back {
+  margin-left: auto;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: #777; text-decoration: none;
+  border: 1px solid #333; padding: 8px 18px;
+  transition: all .2s;
+}
+.nav-back:hover { color: #C9A84C; border-color: #C9A84C; }
+
+/* WRAPPER */
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 78px 24px 80px;
+}
+
+/* INTRO */
+.intro { text-align: center; padding: 40px 0 0; }
+.intro-tag {
+  display: inline-block;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: #C9A84C; border: 1px solid rgba(201,168,76,.3);
+  padding: 5px 16px; margin-bottom: 28px;
+}
+.intro h1 {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 900; line-height: 1.1;
+  color: #fff; margin-bottom: 16px;
+}
+.intro h1 em { color: #C9A84C; font-style: italic; }
+.intro p {
+  font-size: 14px; color: #888; line-height: 1.75;
+  max-width: 380px; margin: 0 auto 36px;
+}
+.btn-start {
+  background: #C9A84C; color: #0a0a0a;
+  border: none; padding: 16px 40px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; transition: background .2s;
+}
+.btn-start:hover { background: #E8C96B; }
+.intro-note { margin-top: 14px; font-size: 11px; color: #444; }
+
+/* PROGRESS */
+.progress-block { display: none; padding-top: 20px; }
+.prog-row {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 10px;
+}
+.prog-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #555; }
+.prog-count { font-size: 11px; color: #C9A84C; font-weight: 700; }
+.prog-bar { height: 2px; background: #1e1e1e; }
+.prog-fill { height: 100%; background: #C9A84C; transition: width .4s ease; width: 0%; }
+
+/* CHAT */
+.chat { display: none; flex-direction: column; gap: 0; padding-top: 24px; }
+
+.bot-row { display: flex; gap: 10px; margin-bottom: 6px; animation: fadeUp .3s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }
+
+.bot-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #C9A84C; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "Playfair Display", serif;
+  font-size: 12px; font-weight: 700; color: #0a0a0a;
+}
+.bot-bubble {
+  background: #161616; border: 1px solid #222;
+  border-radius: 2px 14px 14px 14px;
+  padding: 14px 18px;
+  font-size: 14px; line-height: 1.7; color: #ccc;
+  max-width: calc(100% - 46px);
+}
+.bot-bubble strong { color: #fff; font-weight: 600; }
+
+.typing { display: flex; gap: 5px; padding: 6px 2px; align-items: center; }
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #333; animation: blink 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+
+.user-row { display: flex; justify-content: flex-end; margin-bottom: 6px; animation: fadeUp .25s ease both; }
+.user-bubble {
+  background: #141208; border: 1px solid #2a2510;
+  border-radius: 14px 2px 14px 14px;
+  padding: 11px 16px; font-size: 14px; color: #b8b4a8;
+  max-width: 76%;
+}
+
+/* OPTIONS */
+.options { display: none; flex-direction: column; gap: 8px; padding-top: 12px; }
+.opt {
+  background: #161616; border: 1px solid #222;
+  border-radius: 0; padding: 13px 18px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px; color: #fff;
+  cursor: pointer; text-align: left;
+  transition: border-color .15s, background .15s;
+}
+.opt:hover { border-color: #C9A84C; background: #1a1a1a; }
+.opt.selected { border-color: #C9A84C; background: rgba(201,168,76,.08); color: #C9A84C; cursor: default; }
+
+/* RESULT */
+.result { display: none; padding-top: 24px; animation: fadeUp .4s ease both; }
+
+.result-card { border: 1px solid #222; }
+.result-head { padding: 28px 24px 20px; border-bottom: 1px solid #1e1e1e; }
+.result-verdict { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; }
+.result-title {
+  font-family: "Playfair Display", serif;
+  font-size: 24px; font-weight: 900;
+  color: #fff; line-height: 1.2; margin-bottom: 10px;
+}
+.result-sub { font-size: 13px; color: #777; line-height: 1.7; }
+
+.result-body { padding: 20px 24px; border-bottom: 1px solid #1e1e1e; }
+.result-body-title {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: #C9A84C; margin-bottom: 14px;
+}
+.reason { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+.reason-dot { width: 4px; height: 4px; border-radius: 50%; margin-top: 8px; flex-shrink: 0; }
+.reason-text { font-size: 13px; color: #aaa; line-height: 1.6; }
+
+.result-rec { padding: 20px 24px; border-bottom: 1px solid #1e1e1e; background: #111; }
+.rec-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #C9A84C; margin-bottom: 8px; }
+.rec-text { font-size: 13px; color: #ddd; line-height: 1.7; }
+
+.result-cta { padding: 24px; text-align: center; }
+.cta-text { font-size: 13px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+.btn-cta {
+  display: block; width: 100%;
+  background: #C9A84C; color: #0a0a0a;
+  border: none; padding: 16px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s; margin-bottom: 12px;
+}
+.btn-cta:hover { background: #E8C96B; }
+.cta-note { font-size: 11px; color: #333; }
+
+/* COLORS */
+.v-low .result-verdict { color: #e74c3c; }
+.v-low .result-head { background: #130b0b; }
+.v-low .reason-dot { background: #e74c3c; }
+
+.v-mid .result-verdict { color: #e67e22; }
+.v-mid .result-head { background: #13100a; }
+.v-mid .reason-dot { background: #e67e22; }
+
+.v-ok .result-verdict { color: #27ae60; }
+.v-ok .result-head { background: #0a130c; }
+.v-ok .reason-dot { background: #27ae60; }
+
+@media(max-width: 500px) {
+  .nav-tag { display: none; }
+  .bot-bubble { font-size: 13px; }
+  .opt { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">O|P</div>
+  <div class="nav-tag">Диагностика цены</div>
+  <a class="nav-back" href="https://xugushik-source.github.io/order-profit-/">← Сайт</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="intro" id="introBlock">
+    <div class="intro-tag">Order & Profit · Тест</div>
+    <h1>Вы продаёте<br><em>слишком дёшево?</em></h1>
+    <p>7 вопросов — честный диагноз. Не про цену. Про то, обоснован ли ваш страх её поднять.</p>
+    <button class="btn-start" onclick="startTest()">Пройти тест →</button>
+    <p class="intro-note">Займёт 2 минуты · Результат сразу</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-block" id="progressBlock">
+    <div class="prog-row">
+      <span class="prog-label">Диагностика цены</span>
+      <span class="prog-count" id="progCount">1 / 7</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat" id="chatWrap"></div>
+
+  <!-- OPTIONS -->
+  <div class="options" id="optionsWrap"></div>
+
+  <!-- RESULT -->
+  <div class="result" id="resultWrap"></div>
+
+</div>
+
+<script>
+var questions = [
+  {
+    q: "Когда вы <strong>последний раз меняли цены</strong>?",
+    opts: [
+      { label: "Менее 6 месяцев назад", score: 0 },
+      { label: "6–12 месяцев назад", score: 1 },
+      { label: "Больше года назад", score: 2 },
+      { label: "Никогда не менял", score: 3 }
+    ]
+  },
+  {
+    q: "Клиенты когда-нибудь говорили: <strong>«У вас так дёшево»</strong>?",
+    opts: [
+      { label: "Да, такое бывает", score: 2 },
+      { label: "Нет, никогда", score: 0 },
+      { label: "Не обращал внимания", score: 1 }
+    ]
+  },
+  {
+    q: "Бывают дни, когда вы <strong>не успеваете обслужить всех</strong> желающих?",
+    opts: [
+      { label: "Да, регулярно", score: 2 },
+      { label: "Иногда случается", score: 1 },
+      { label: "Нет, мест всегда хватает", score: 0 }
+    ]
+  },
+  {
+    q: "Вы знаете цены <strong>минимум трёх конкурентов</strong> прямо сейчас?",
+    opts: [
+      { label: "Да, слежу за этим", score: 0 },
+      { label: "Примерно представляю", score: 1 },
+      { label: "Нет, не смотрел", score: 2 }
+    ]
+  },
+  {
+    q: "Если поднять цену на 10% — сколько клиентов вы <strong>реально потеряете</strong>?",
+    opts: [
+      { label: "У меня есть расчёт", score: 0 },
+      { label: "Думаю, немного", score: 1 },
+      { label: "Не знаю, не считал", score: 2 },
+      { label: "Просто боюсь — цифр нет", score: 3 }
+    ]
+  },
+  {
+    q: "Ваши <strong>расходы росли</strong> последние 12 месяцев — аренда, продукты, зарплаты?",
+    opts: [
+      { label: "Да, значительно", score: 2 },
+      { label: "Немного выросли", score: 1 },
+      { label: "Практически не менялись", score: 0 }
+    ]
+  },
+  {
+    q: "Вы считаете <strong>чистую прибыль</strong> по каждому товару или услуге отдельно?",
+    opts: [
+      { label: "Да, веду учёт", score: 0 },
+      { label: "Считаю в целом по бизнесу", score: 1 },
+      { label: "Нет, работаю на ощущение", score: 2 }
+    ]
+  }
+];
+
+var results = [
+  {
+    range: [0, 5], cls: "v-ok",
+    verdict: "Цена, вероятно, адекватная",
+    title: "Проблема скорее всего не в цене",
+    sub: "Ваши ответы показывают: вы отслеживаете рынок, считаете цифры, пересматриваете цены. Страх повышения — не главная точка роста.",
+    reasons: [
+      "Вы знаете конкурентов и следите за расходами",
+      "Есть или почти есть расчёт влияния цены",
+      "Загрузка не критическая — нет избыточного спроса"
+    ],
+    rec: "Сначала работайте с потоком клиентов, упаковкой и конверсией. Цена — вторичный рычаг для вашей ситуации.",
+    cta: "Разобраться с упаковкой"
+  },
+  {
+    range: [6, 10], cls: "v-mid",
+    verdict: "Есть признаки заниженной цены",
+    title: "Вы, возможно, оставляете деньги на столе",
+    sub: "Несколько сигналов указывают: цену можно безопасно проверить. Не поднять сразу — а посчитать и протестировать.",
+    reasons: [
+      "Цены пересматривались давно или не пересматривались",
+      "Есть признаки высокого спроса или отсутствие расчёта",
+      "Расходы растут, а цена стоит — маржа падает"
+    ],
+    rec: "Протестируйте повышение на 5–8% на части ассортимента. Замерьте реакцию за 3–4 недели — это покажет реальную эластичность.",
+    cta: "Получить план теста цены"
+  },
+  {
+    range: [11, 18], cls: "v-low",
+    verdict: "Высокая вероятность: цена занижена",
+    title: "Вы продаёте дешевле, чем можете",
+    sub: "Ваши ответы — классическая картина: бизнес боится цены больше, чем реальные клиенты. Это решаемо.",
+    reasons: [
+      "Цены не менялись более года при росте расходов",
+      "Клиенты сами говорят, что у вас дёшево — прямой сигнал",
+      "Нет расчёта влияния повышения — страх работает вместо данных",
+      "Высокая загрузка: спрос есть, цена не отражает ценность"
+    ],
+    rec: "Начните с 10% на 2–3 позиции. Не объявляйте — просто поменяйте и наблюдайте 4 недели. Данные убьют страх лучше любых доводов.",
+    cta: "Обсудить стратегию повышения цены"
+  }
+];
+
+var current = 0;
+var totalScore = 0;
+var locked = false;
+
+function $(id) { return document.getElementById(id); }
+
+function startTest() {
+  $('introBlock').style.display = 'none';
+  $('progressBlock').style.display = 'block';
+  $('chatWrap').style.display = 'flex';
+  $('chatWrap').style.flexDirection = 'column';
+  showQ(0);
+}
+
+function updateProg(idx) {
+  var pct = (idx / questions.length) * 100;
+  $('progFill').style.width = pct + '%';
+  $('progCount').textContent = (idx + 1) + ' / ' + questions.length;
+}
+
+function showQ(idx) {
+  updateProg(idx);
+  locked = true;
+  $('optionsWrap').style.display = 'none';
+  $('optionsWrap').innerHTML = '';
+
+  var tRow = makeBotRow(true);
+  $('chatWrap').appendChild(tRow);
+  scrollBot();
+
+  setTimeout(function() {
+    tRow.remove();
+    var mRow = makeBotRow(false, questions[idx].q);
+    $('chatWrap').appendChild(mRow);
+
+    var wrap = $('optionsWrap');
+    questions[idx].opts.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = opt.label;
+      btn.onclick = function() { if (!locked) pickOpt(btn, opt, idx); };
+      wrap.appendChild(btn);
+    });
+    wrap.style.display = 'flex';
+    wrap.style.flexDirection = 'column';
+    locked = false;
+    scrollBot();
+  }, 700);
+}
+
+function makeBotRow(typing, html) {
+  var row = document.createElement('div');
+  row.className = 'bot-row';
+  var av = document.createElement('div');
+  av.className = 'bot-av';
+  av.textContent = 'O&P';
+  var bub = document.createElement('div');
+  bub.className = 'bot-bubble';
+  if (typing) {
+    bub.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  } else {
+    bub.innerHTML = html;
+  }
+  row.appendChild(av);
+  row.appendChild(bub);
+  return row;
+}
+
+function pickOpt(btn, opt, idx) {
+  locked = true;
+  $('optionsWrap').querySelectorAll('.opt').forEach(function(b) { b.disabled = true; });
+  btn.classList.add('selected');
+  totalScore += opt.score;
+
+  setTimeout(function() {
+    $('optionsWrap').style.display = 'none';
+    $('optionsWrap').innerHTML = '';
+
+    var uRow = document.createElement('div');
+    uRow.className = 'user-row';
+    var ub = document.createElement('div');
+    ub.className = 'user-bubble';
+    ub.textContent = btn.textContent;
+    uRow.appendChild(ub);
+    $('chatWrap').appendChild(uRow);
+    scrollBot();
+
+    current++;
+    if (current < questions.length) {
+      setTimeout(function() { showQ(current); }, 400);
+    } else {
+      setTimeout(showResult, 500);
+    }
+  }, 300);
+}
+
+function showResult() {
+  $('progFill').style.width = '100%';
+  $('progCount').textContent = '7 / 7';
+
+  var tRow = makeBotRow(true);
+  $('chatWrap').appendChild(tRow);
+  scrollBot();
+
+  setTimeout(function() {
+    tRow.remove();
+    var mRow = makeBotRow(false, 'Готово. Анализирую ваши ответы...');
+    $('chatWrap').appendChild(mRow);
+    scrollBot();
+    setTimeout(renderResult, 800);
+  }, 700);
+}
+
+function renderResult() {
+  var r = results[results.length - 1];
+  for (var i = 0; i < results.length; i++) {
+    if (totalScore >= results[i].range[0] && totalScore <= results[i].range[1]) {
+      r = results[i]; break;
+    }
+  }
+
+  var wrap = $('resultWrap');
+  wrap.style.display = 'block';
+  wrap.innerHTML =
+    '<div class="result-card ' + r.cls + '">' +
+      '<div class="result-head">' +
+        '<div class="result-verdict">' + r.verdict + '</div>' +
+        '<div class="result-title">' + r.title + '</div>' +
+        '<div class="result-sub">' + r.sub + '</div>' +
+      '</div>' +
+      '<div class="result-body">' +
+        '<div class="result-body-title">Почему так</div>' +
+        r.reasons.map(function(re) {
+          return '<div class="reason"><div class="reason-dot"></div><div class="reason-text">' + re + '</div></div>';
+        }).join('') +
+      '</div>' +
+      '<div class="result-rec">' +
+        '<div class="rec-label">Рекомендация</div>' +
+        '<div class="rec-text">' + r.rec + '</div>' +
+      '</div>' +
+      '<div class="result-cta">' +
+        '<div class="cta-text">Хотите разобрать именно вашу ситуацию?<br>15 минут — конкретный первый шаг. Бесплатно.</div>' +
+        '<a class="btn-cta" href="https://xugushik-source.github.io/order-profit-/" target="_blank">' + r.cta + ' →</a>' +
+        '<div class="cta-note">Order & Profit · Акhalkalaki, Georgia</div>' +
+      '</div>' +
+    '</div>';
+
+  scrollBot();
+}
+
+function scrollBot() {
+  setTimeout(function() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, 60);
+}
+</script>
+</body>
+</html>
