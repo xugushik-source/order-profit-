@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест: умеете ли вы нанимать людей? — Order & Profit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f5f3ef; color: #1a1a1a; font-family: "Montserrat", sans-serif; min-height: 100vh; }
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: #fff; border-bottom: 2px solid #e8e2d8; display: flex; align-items: center; padding: 0 20px; height: 56px; box-shadow: 0 2px 12px rgba(0,0,0,.06); }
+.nav-logo { font-family: "Playfair Display", serif; font-size: 20px; font-weight: 700; color: #1a1a1a; letter-spacing: 3px; }
+.nav-logo span { color: #c9a84c; }
+.nav-tag { margin-left: 16px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #999; border-left: 1px solid #ddd; padding-left: 16px; font-weight: 600; }
+.nav-back { margin-left: auto; font-size: 11px; font-weight: 700; color: #1a1a1a; text-decoration: none; background: #f0ebe0; border: 2px solid #c9a84c; padding: 7px 14px; }
+.wrap { max-width: 560px; margin: 0 auto; padding: 72px 20px 80px; }
+.intro-tag { display: inline-block; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #fff; background: #c9a84c; padding: 6px 18px; margin-bottom: 28px; font-weight: 700; }
+.intro-title { font-family: "Playfair Display", serif; font-size: 36px; font-weight: 900; line-height: 1.15; color: #1a1a1a; margin-bottom: 16px; }
+.intro-title em { color: #c9a84c; font-style: italic; }
+.intro-sub { font-size: 15px; color: #666; line-height: 1.75; max-width: 380px; margin: 0 auto 36px; }
+.btn-start { background: #1a1a1a; color: #fff; border: none; padding: 18px 44px; font-family: "Montserrat", sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; display: block; margin: 0 auto; }
+.intro-note { margin-top: 14px; font-size: 12px; color: #aaa; text-align: center; }
+.prog-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.prog-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #999; font-weight: 600; }
+.prog-count { font-size: 12px; color: #c9a84c; font-weight: 700; }
+.prog-bar { height: 3px; background: #e0dbd0; border-radius: 2px; }
+.prog-fill { height: 100%; background: #c9a84c; border-radius: 2px; transition: width .4s; width: 0%; }
+.bot-row { display: flex; gap: 12px; margin-bottom: 8px; }
+.bot-av { width: 40px; height: 40px; border-radius: 50%; background: #1a1a1a; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #c9a84c; border: 2px solid #c9a84c; }
+.bot-bub { background: #fff; border: 1px solid #e0dbd0; border-radius: 4px 16px 16px 16px; padding: 14px 18px; font-size: 15px; line-height: 1.7; color: #2a2a2a; max-width: calc(100% - 52px); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.typing { display: flex; gap: 5px; padding: 6px 2px; align-items: center; }
+.typing span { width: 8px; height: 8px; border-radius: 50%; background: #ccc; animation: blink 1.2s infinite; }
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,80%,100%{opacity:.3} 40%{opacity:1} }
+.user-row { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.user-bub { background: #c9a84c; border-radius: 16px 4px 16px 16px; padding: 12px 18px; font-size: 14px; color: #fff; max-width: 76%; font-weight: 500; }
+.opt-btn { display: block; width: 100%; background: #fff; border: 2px solid #e0dbd0; border-radius: 8px; padding: 14px 20px; font-family: "Montserrat", sans-serif; font-size: 14px; color: #1a1a1a; cursor: pointer; text-align: left; font-weight: 500; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+.opt-btn.sel { border-color: #c9a84c; background: #fdf9f0; color: #8a6a1a; }
+.res-card { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,.1); margin-top: 20px; }
+.res-head { padding: 28px 24px 20px; border-bottom: 1px solid rgba(0,0,0,.08); }
+.res-verdict { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+.res-title { font-family: "Playfair Display", serif; font-size: 22px; font-weight: 900; line-height: 1.2; margin-bottom: 10px; }
+.res-sub { font-size: 14px; line-height: 1.7; opacity: .85; }
+.res-body { padding: 20px 24px; background: #fff; border-bottom: 1px solid #f0ebe0; }
+.res-body-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #999; font-weight: 700; margin-bottom: 14px; }
+.reason { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+.reason-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.reason-text { font-size: 14px; color: #444; line-height: 1.6; }
+.res-rec { padding: 20px 24px; background: #fdf9f0; border-bottom: 1px solid #f0ebe0; }
+.res-rec-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c9a84c; font-weight: 700; margin-bottom: 8px; }
+.res-rec-text { font-size: 14px; color: #333; line-height: 1.7; }
+.res-cta { padding: 24px; background: #fff; text-align: center; }
+.res-cta-text { font-size: 14px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+.res-cta-btn { display: block; width: 100%; background: #1a1a1a; color: #fff; border: none; padding: 16px; font-family: "Montserrat", sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; text-decoration: none; border-radius: 6px; margin-bottom: 12px; }
+.res-cta-note { font-size: 11px; color: #bbb; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">O<span>|</span>P</div>
+  <div class="nav-tag">Диагностика</div>
+  <a class="nav-back" href="https://xugushik-source.github.io/order-profit-/">← Сайт</a>
+</nav>
+
+<div class="wrap">
+
+  <div id="S0" style="text-align:center;padding-top:40px;">
+    <div class="intro-tag">Order & Profit · Тест</div>
+    <div class="intro-title">Умеете ли вы<br><em>нанимать людей?</em></div>
+    <div class="intro-sub">7 вопросов — и вы узнаете: вы строите команду или собираете проблемы.</div>
+    <button class="btn-start" onclick="startTest()">Пройти тест →</button>
+    <div class="intro-note">Займёт 2 минуты · Результат сразу</div>
+  </div>
+
+  <div id="S1" style="display:none;">
+    <div class="prog-row">
+      <span class="prog-label">Диагностика</span>
+      <span id="pc" class="prog-count">1 / 7</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="pf"></div></div>
+    <div id="chat" style="display:flex;flex-direction:column;padding-top:20px;"></div>
+    <div id="opts" style="padding-top:12px;"></div>
+  </div>
+
+  <div id="S2" style="display:none;"></div>
+
+</div>
+
+<script>
+var Q = [
+  {
+    t: "Где вы ищете сотрудников когда нужен новый человек?",
+    o: [
+      { t: "Среди знакомых и родственников — первым делом", s: 3 },
+      { t: "Спрашиваю у знакомых и параллельно смотрю объявления", s: 1 },
+      { t: "Размещаю вакансию и провожу отбор", s: 0 }
+    ]
+  },
+  {
+    t: "Как вы определяете зарплату для нового сотрудника?",
+    o: [
+      { t: "Плачу столько сколько он согласится взять", s: 3 },
+      { t: "Смотрю на рынок примерно — плачу среднее или ниже", s: 2 },
+      { t: "Есть вилка зарплат под каждую должность", s: 0 }
+    ]
+  },
+  {
+    t: "Бывало ли что сотрудник из 'своих' оказался проблемой?",
+    o: [
+      { t: "Да — и не раз, но продолжаю так нанимать", s: 3 },
+      { t: "Бывало — но других вариантов нет", s: 2 },
+      { t: "Стараюсь не смешивать личное и рабочее", s: 0 }
+    ]
+  },
+  {
+    t: "Есть ли у вас список требований к кандидату перед собеседованием?",
+    o: [
+      { t: "Нет — смотрю на человека вживую", s: 3 },
+      { t: "Примерно в голове — не записывал", s: 2 },
+      { t: "Да — есть конкретные критерии отбора", s: 0 }
+    ]
+  },
+  {
+    t: "Как вы вводите нового сотрудника в работу?",
+    o: [
+      { t: "Бросаю в воду — сам разберётся", s: 3 },
+      { t: "Объясняю сам — трачу на это дни", s: 2 },
+      { t: "Есть инструкции и наставник", s: 0 }
+    ]
+  },
+  {
+    t: "Говорили ли вы когда-нибудь: «У нас нет хороших людей»?",
+    o: [
+      { t: "Да — постоянно, людей найти невозможно", s: 3 },
+      { t: "Иногда — хороших мало", s: 1 },
+      { t: "Нет — правильный найм решает проблему", s: 0 }
+    ]
+  },
+  {
+    t: "Если сотрудник работает плохо — что вы делаете?",
+    o: [
+      { t: "Терплю — уволить некем заменить", s: 3 },
+      { t: "Ругаю, но всё равно оставляю", s: 2 },
+      { t: "Есть система оценки и чёткие последствия", s: 0 }
+    ]
+  }
+];
+
+var R = [
+  {
+    min: 0, max: 4, color: "#27ae60", hbg: "#f0faf4", hcol: "#1a1a1a",
+    verdict: "Вы умеете нанимать",
+    title: "У вас системный подход к команде",
+    sub: "Ваши ответы показывают: вы понимаете что правильный найм — это инвестиция а не расход. Это основа сильного бизнеса.",
+    reasons: [
+      "Вы ищете людей по критериям а не по знакомству",
+      "Есть понимание рыночной зарплаты",
+      "Новый сотрудник входит в работу по системе"
+    ],
+    rec: "Следующий шаг — упаковать стандарты найма и обучения. Тогда команда будет расти без вашего постоянного участия.",
+    cta: "Узнать стоимость для вашего бизнеса"
+  },
+  {
+    min: 5, max: 10, color: "#e67e22", hbg: "#fff8f0", hcol: "#1a1a1a",
+    verdict: "Есть проблемы с наймом",
+    title: "Вы нанимаете людей — но не тех",
+    sub: "Частично понимаете проблему, но привычки берут верх. Знакомые кажутся дешёвыми — но обходятся дороже всего.",
+    reasons: [
+      "Найм через знакомых создаёт скрытые проблемы",
+      "Нет чётких критериев — берёте на ощущение",
+      "Низкая зарплата отпугивает профессионалов"
+    ],
+    rec: "Хороших людей не находят — их привлекают. Правильная вакансия, честная зарплата и чёткие условия дают лучших кандидатов чем весь круг знакомств.",
+    cta: "Узнать стоимость для вашего бизнеса"
+  },
+  {
+    min: 11, max: 21, color: "#c0392b", hbg: "#1a1a1a", hcol: "#fff",
+    verdict: "Найм — ваша главная проблема",
+    title: "Вы не нанимаете — вы соглашаетесь",
+    sub: "Ваши ответы — классическая картина: берёте кого дадут, платите сколько согласятся, а потом удивляетесь почему нет результата.",
+    reasons: [
+      "Найм через знакомых — это не найм, это лотерея",
+      "Низкая зарплата = слабый кандидат = ваши проблемы",
+      "Нет системы ввода — новый человек теряется и уходит",
+      "«Нет людей» — значит нет правильного поиска"
+    ],
+    rec: "Проблема не в рынке. В Джавахети есть люди которые хотят работать хорошо — но они идут туда где платят честно и объясняют что делать. Мы помогаем выстроить найм с нуля.",
+    cta: "Узнать стоимость для вашего бизнеса"
+  }
+];
+
+var cur = 0, score = 0, locked = false;
+
+function startTest() {
+  document.getElementById("S0").style.display = "none";
+  document.getElementById("S1").style.display = "block";
+  askQ(0);
+}
+
+function askQ(i) {
+  locked = true;
+  document.getElementById("pf").style.width = (i / Q.length * 100) + "%";
+  document.getElementById("pc").textContent = (i + 1) + " / " + Q.length;
+  document.getElementById("opts").innerHTML = "";
+  var chat = document.getElementById("chat");
+  var tr = makeTyping();
+  chat.appendChild(tr);
+  goDown();
+  setTimeout(function() {
+    tr.parentNode && tr.parentNode.removeChild(tr);
+    chat.appendChild(makeBubble(Q[i].t));
+    var opts = document.getElementById("opts");
+    for (var j = 0; j < Q[i].o.length; j++) {
+      (function(opt) {
+        var b = document.createElement("button");
+        b.className = "opt-btn";
+        b.textContent = opt.t;
+        b.setAttribute("onclick", "pick(this, " + opt.s + ")");
+        opts.appendChild(b);
+      })(Q[i].o[j]);
+    }
+    locked = false;
+    goDown();
+  }, 700);
+}
+
+function pick(btn, s) {
+  if (locked) return;
+  locked = true;
+  btn.classList.add("sel");
+  var btns = document.getElementById("opts").querySelectorAll(".opt-btn");
+  for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
+  score += s;
+  var txt = btn.textContent;
+  setTimeout(function() {
+    document.getElementById("opts").innerHTML = "";
+    var chat = document.getElementById("chat");
+    var ur = document.createElement("div");
+    ur.className = "user-row";
+    var ub = document.createElement("div");
+    ub.className = "user-bub";
+    ub.textContent = txt;
+    ur.appendChild(ub);
+    chat.appendChild(ur);
+    goDown();
+    cur++;
+    if (cur < Q.length) { setTimeout(function() { askQ(cur); }, 400); }
+    else { setTimeout(finish, 500); }
+  }, 300);
+}
+
+function finish() {
+  document.getElementById("pf").style.width = "100%";
+  document.getElementById("pc").textContent = Q.length + " / " + Q.length;
+  var chat = document.getElementById("chat");
+  var tr = makeTyping();
+  chat.appendChild(tr);
+  goDown();
+  setTimeout(function() {
+    tr.parentNode && tr.parentNode.removeChild(tr);
+    chat.appendChild(makeBubble("Готово. Анализирую ваши ответы..."));
+    goDown();
+    setTimeout(showRes, 800);
+  }, 700);
+}
+
+function showRes() {
+  var r = R[R.length - 1];
+  for (var i = 0; i < R.length; i++) {
+    if (score >= R[i].min && score <= R[i].max) { r = R[i]; break; }
+  }
+  var s2 = document.getElementById("S2");
+  s2.style.display = "block";
+  var html = '<div class="res-card">' +
+    '<div class="res-head" style="background:' + r.hbg + ';color:' + r.hcol + '">' +
+    '<div class="res-verdict" style="color:' + r.color + '">' + r.verdict + '</div>' +
+    '<div class="res-title">' + r.title + '</div>' +
+    '<div class="res-sub">' + r.sub + '</div></div>' +
+    '<div class="res-body"><div class="res-body-label">Почему так</div>';
+  for (var i = 0; i < r.reasons.length; i++) {
+    html += '<div class="reason"><div class="reason-dot" style="background:' + r.color + '"></div><div class="reason-text">' + r.reasons[i] + '</div></div>';
+  }
+  html += '</div><div class="res-rec"><div class="res-rec-label">Что делать</div><div class="res-rec-text">' + r.rec + '</div></div>' +
+    '<div class="res-cta"><div class="res-cta-text">Каждый бизнес мы рассчитываем индивидуально.<br>Напишите — разберём вашу ситуацию бесплатно за 15 минут.</div>' +
+    '<a class="res-cta-btn" href="https://xugushik-source.github.io/order-profit-/" target="_blank">' + r.cta + ' →</a>' +
+    '<div class="res-cta-note">Order & Profit · Akhalkalaki, Georgia</div></div></div>';
+  s2.innerHTML = html;
+  goDown();
+}
+
+function makeTyping() {
+  var row = document.createElement("div");
+  row.className = "bot-row";
+  var av = document.createElement("div");
+  av.className = "bot-av";
+  av.textContent = "O&P";
+  var bub = document.createElement("div");
+  bub.className = "bot-bub";
+  bub.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  row.appendChild(av);
+  row.appendChild(bub);
+  return row;
+}
+
+function makeBubble(txt) {
+  var row = document.createElement("div");
+  row.className = "bot-row";
+  var av = document.createElement("div");
+  av.className = "bot-av";
+  av.textContent = "O&P";
+  var bub = document.createElement("div");
+  bub.className = "bot-bub";
+  bub.textContent = txt;
+  row.appendChild(av);
+  row.appendChild(bub);
+  return row;
+}
+
+function goDown() {
+  setTimeout(function() { window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); }, 60);
+}
+</script>
+</body>
+</html>
