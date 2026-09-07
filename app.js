@@ -4,12 +4,23 @@ let lang='ru';
 function setLang(l){document.body.classList.add('switching');setTimeout(()=>{lang=l;document.documentElement.lang=l;document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[l][k]!=null)el.innerHTML=dict[l][k]});document.querySelectorAll('[data-setlang]').forEach(b=>b.classList.toggle('on',b.dataset.setlang===l));document.body.classList.remove('switching');localStorage.setItem('op-lang',l)},180)}
 document.querySelectorAll('[data-setlang]').forEach(b=>b.onclick=()=>setLang(b.dataset.setlang));
 const saved=localStorage.getItem('op-lang');if(saved==='en')setLang('en');
-window.addEventListener('load',()=>setTimeout(()=>document.querySelector('.preload').classList.add('off'),450));
+window.addEventListener('load',()=>setTimeout(()=>document.querySelector('.preload')?.classList.add('off'),450));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-document.querySelectorAll('.problem').forEach((b,i)=>b.onclick=()=>{document.querySelectorAll('.problem').forEach(x=>x.classList.remove('active'));b.classList.add('active');const s=document.querySelector('#solution');s.innerHTML=sols[lang][i]+' <a href="https://instagram.com/orderprofit.he" target="_blank" style="color:var(--acid);margin-left:8px;font-weight:800">ORDER & PROFIT ↗</a>';s.classList.add('show')});
+function showSolution(button,index){
+ document.querySelectorAll('.problem').forEach(x=>x.classList.remove('active'));
+ button.classList.add('active');
+ const s=document.querySelector('#solution');
+ if(!s)return;
+ s.innerHTML=sols[lang][index]+' <a href="https://instagram.com/orderprofit.he" target="_blank" rel="noopener" style="color:var(--acid);font-weight:800;display:inline-block;margin-top:12px">ORDER & PROFIT ↗</a>';
+ s.classList.add('show');
+ if(window.innerWidth<=900)setTimeout(()=>s.scrollIntoView({behavior:'smooth',block:'center'}),80);
+}
+document.querySelectorAll('.problem').forEach((b,i)=>{
+ b.addEventListener('click',e=>{e.preventDefault();showSolution(b,i)});
+ b.addEventListener('touchend',e=>{e.preventDefault();showSolution(b,i)},{passive:false});
+});
 const cur=document.querySelector('.cursor');
-window.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
-document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cur.style.width='46px';cur.style.height='46px';cur.style.background='#fff'});el.addEventListener('mouseleave',()=>{cur.style.width='22px';cur.style.height='22px';cur.style.background='transparent'})});
+if(cur){window.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cur.style.width='46px';cur.style.height='46px';cur.style.background='#fff'});el.addEventListener('mouseleave',()=>{cur.style.width='22px';cur.style.height='22px';cur.style.background='transparent'})})}
 document.querySelectorAll('.magnetic').forEach(el=>el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.08}px,${(e.clientY-r.top-r.height/2)*.08}px)`}));
 document.querySelectorAll('.magnetic').forEach(el=>el.addEventListener('mouseleave',()=>el.style.transform=''));
