@@ -1,0 +1,17 @@
+ORDER & PROFIT — ORIGINAL PHOTOS
+
+Upload these 6 files to the ROOT of repository xugushik-source/order-profit- :
+hero.jpg
+founder.jpg
+process.jpg
+hero.css
+founder.css
+process.css
+
+When GitHub asks whether to replace existing CSS files, replace:
+hero.css
+founder.css
+process.css
+
+Do NOT delete or modify any project repositories.
+These are full original JPEG files, not compressed tiny/base64 copies.
